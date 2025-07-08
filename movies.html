@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movies Available</title>
+  <style>
+    #searchSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+#searchInput {
+  padding: 10px;
+  font-size: 16px;
+  width: 250px;
+  border-radius: 5px;
+  border: none;
+}
+
+#searchBtn {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #1DB954;
+  border: none;
+  color: #000;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#searchBtn:hover {
+  background-color: #1ed760;
+}
+    body{
+        margin:0;
+        padding:0;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: #121212;
+        color: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+    }
+    h1{
+      font-size: 5rem;
+      margin-bottom: 50px;
+      color: #1DB954;
+    }
+    #movieContainer{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;   
+    }
+    .movieCard{
+        background-color: #1e1e1e;
+        display: flex;
+        flex-direction: column;
+        padding:20px 40px 20px 40px;
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        border-radius:10px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top:10px;
+      margin-bottom:10px;
+      border-radius: 8px;
+      border: none;
+      background-color: #1DB954;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      background-color: #1ed760;
+      transform: scale(1.03);
+    }
+    #trailerModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#trailerContent {
+  position: relative;
+  background-color: #000;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #000;
+}
+
+#trailerContent iframe {
+  border-radius: 10px;
+}
+
+#closeTrailerBtn {
+  position: absolute;
+  top: -10px;
+  right:-10px;
+  background: #ff3e3e;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+  </style>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<body>
+
+<h1>AVAILABLE MOVIES</h1>
+
+<div id="searchSection">
+  <input type="text" id="searchInput" placeholder="Search" />
+  <button onclick="handleSearch()">Search</button>
+</div>
+
+<div id="trailerModal" style="display:none;">
+  <div id="trailerContent">
+    <button id="closeTrailerBtn">✖</button>
+    <iframe id="trailerIframe" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>
+
+<div id="movieContainer"></div>
+
+<script src="javascript/movies.js"></script>
+<button onclick="location.href='watched-movies.html'">Go to Watched Movies</button>
+
+</body>
+</html>

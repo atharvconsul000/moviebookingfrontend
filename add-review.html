@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add Review</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      color: #1DB954;
+      margin-bottom: 30px;
+    }
+
+    form {
+      background-color: #1e1e1e;
+      padding: 30px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background-color: #2a2a2a;
+      color: white;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #bbb;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background-color: #1DB954;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #1ed760;
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Submit Your Review</h2>
+
+  <form id="reviewForm">
+    <input type="text" id="rating" placeholder="Rating" required />
+    <textarea id="comment" maxlength="100" rows="4" placeholder="Comment (max 100 characters)" required></textarea>
+    <button type="submit">Submit Review</button>
+  </form>
+
+  <script>
+    document.getElementById("reviewForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const ratingValue = document.getElementById("rating").value.trim();
+  const rating = parseFloat(ratingValue);
+  const comment = document.getElementById("comment").value.trim();
+  const token = localStorage.getItem("token");
+  const params = new URLSearchParams(window.location.search);
+  const movieId = params.get("movieId");
+
+  if (!token) {
+    alert("Please login first.");
+    location.href = "login.html";
+    return;
+  }
+
+  if (!movieId) {
+    alert("Missing movie ID.");
+    location.href = "watched-movies.html";
+    return;
+  }
+
+  if ( rating < 0 || rating > 5) {
+    alert("Please enter a valid rating between 0.0 and 5.0");
+    return;
+  }
+
+  try {
+    const res = await fetch(`http://localhost:3000/user/rate/${movieId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ rating, comment })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Review submitted successfully!");
+      document.getElementById("reviewForm").reset();
+      location.href = "watched-movies.html";
+    } else {
+      alert(data.message || "Failed to submit review.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong while submitting review.");
+  }
+});
+
+  </script>
+</body>
+</html>

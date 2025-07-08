@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add Movie</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      color: #1DB954; 
+      margin-bottom: 30px;
+    }
+
+    form {
+      background-color: #1e1e1e;
+      padding: 30px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background-color: #2a2a2a;
+      color: white;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    input::placeholder {
+      color: #bbb;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background-color: #1DB954;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #1ed760;
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Add New Movie</h2>
+
+  <form id="addMovieForm">
+    <input type="text" id="name" placeholder="Movie Name" required />
+    <input type="text" id="time" placeholder="Show Time (e.g., 7:00 PM)" required />
+    <input type="number" id="totalSeats" placeholder="Total Seats" min="1" required />
+    <input type="url" id="image" placeholder="Image URL" required />
+    <input type="url" id="link" placeholder="YouTube Trailer Link (optional)" />
+    <button type="submit">Add Movie</button>
+  </form>
+
+  <script>
+    document.getElementById("addMovieForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const time = document.getElementById("time").value;
+      const totalSeats = parseInt(document.getElementById("totalSeats").value);
+      const image = document.getElementById("image").value;
+      const link = document.getElementById("link").value;
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Please login first.");
+        location.href = "login.html";
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost:3000/admin/add-movie", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({ name, time, totalSeats, image,link})
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert("Movie added successfully!");
+          document.getElementById("addMovieForm").reset();
+          location.href = "admin-dashboard.html";
+        } else {
+          alert(data.message || "Failed to add movie");
+        }
+      } catch (error) {
+        alert("Error occurred while adding movie");
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>

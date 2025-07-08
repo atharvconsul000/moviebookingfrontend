@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      justify-content: center;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: #1DB954; 
+      margin-bottom: 50px;
+    }
+    div{
+        background-color: #1e1e1e;
+      padding: 40px 30px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      width: 250px;
+      color: #FFFFFF;
+    }
+
+    button {
+      display: block;
+      width: 250px;
+      margin: 15px 0;
+      padding: 15px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: #1DB954;
+      color: white;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #024519;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Admin Dashboard</h1>
+  <div>
+  <button onclick="location.href='add-movie.html'">Add Movie</button>
+  <button onclick="location.href='admin-movies.html'">View Movies</button>
+  </div>
+</body>
+</html>

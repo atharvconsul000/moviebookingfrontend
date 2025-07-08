@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Download Ticket</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="./qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    #ticket {
+     font-size: 14px; 
+    }
+    button{
+        margin-top:10px;
+        margin-bottom:10px;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        padding:8px;
+        background-color: #1DB954;
+        color: #000000;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        border-radius: 24px;
+    }
+    button:hover {
+      background-color: #035e23;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+ <div id="ticket" style="padding: 20px; border: 5px solid #333; width: 300px ; margin: auto;">
+    <h2>Movie Ticket</h2>
+    <img id="poster" src="" width="100" alt="Movie Poster" />
+    <p><strong>Movie:</strong> <span id="movieName"></span></p>
+    <p><strong>Time:</strong> <span id="movieTime"></span></p>
+    <p><strong>User:</strong> <span id="userNameSpan"></span></p>
+    <p><strong>Booking ID:</strong> <span id="bookingIdSpan"></span></p>
+    <p><strong>No. of Seats:</strong> <span id="seatsSpan"></span></p>
+    <p><strong>Booking Time:</strong> <span id="bookingDateSpan"></span></p>
+    <p><strong>Scan to Verify:</strong></p>
+    <img id="qrImage" src="" alt="QR Code" width="80" />
+  </div>
+
+  <button onclick="waitForImageAndDownload()">Download Ticket</button>
+
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const movieId = params.get("movieId");
+    const userId = params.get("userId");
+
+    async function loadDetails() {
+      const token = localStorage.getItem("token");
+
+      const movieRes = await fetch("http://localhost:3000/user/movies", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const movies = await movieRes.json();
+      let movie = null;
+      for (let i = 0; i < movies.length; i++) {
+      if (movies[i]._id === movieId) {
+       movie = movies[i];
+       break;
+        }
+      }
+
+      if (movie) {
+        document.getElementById("movieName").innerText = movie.name;
+        document.getElementById("movieTime").innerText = movie.time;
+        document.getElementById("poster").src = movie.image;
+      } else {
+        alert("Movie not found");
+      }
+
+      const bookingRes = await fetch(`http://localhost:3000/user/bookings/${movieId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const booking = await bookingRes.json();
+
+      if (booking) {
+        document.getElementById("bookingIdSpan").innerText = booking._id;
+        document.getElementById("seatsSpan").innerText = booking.numberOfSeats;
+        const date = new Date(booking.bookingTime).toLocaleString();
+        document.getElementById("bookingDateSpan").innerText = date;
+      } else {
+        alert("Booking not found");
+      }
+
+    const userRes = await fetch(`http://localhost:3000/user/user/${userId}`, {
+    method: "GET",
+    headers: {
+    Authorization: `Bearer ${token}`
+       }
+    });
+
+    const user = await userRes.json();
+    document.getElementById("userNameSpan").innerText = user.name;
+    
+    const qrData = `http://localhost:5500/Frontend/verify.html?bookingId=${encodeURIComponent(booking._id)}`;
+    QRCode.toDataURL(qrData, function (err, url) {
+      if (err) {
+       console.error("QR generation failed:", err);
+      return;
+      }
+     document.getElementById("qrImage").src = url;
+    });
+}
+function waitForImageAndDownload() {
+  const img = document.getElementById("poster");
+  if (img.complete) {
+    generatePDF();
+  } else {
+    img.onload = () => generatePDF();
+  }
+}
+
+    function generatePDF() {
+      const element = document.getElementById("ticket");
+      html2pdf().set({
+        margin: 0,
+        filename: 'ticket.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'px', format: [360, 650], orientation: 'portrait' }
+       }).from(element).save();
+    }
+
+    loadDetails();
+  </script>
+</body>
+</html>

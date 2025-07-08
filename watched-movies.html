@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movies Available</title>
+  <style>
+    body{
+        margin:0;
+        padding:0;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: #121212;
+        color: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+    }
+    h1{
+      font-size: 5rem;
+      margin-bottom: 50px;
+      color: #1DB954;
+    }
+    #movieContainer{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;   
+    }
+    .movieCard{
+        background-color: #1e1e1e;
+        display: flex;
+        flex-direction: column;
+        padding:20px 40px 20px 40px;
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        border-radius:10px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background-color: #1DB954;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #1ed760;
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body>
+<h1>WATCHED  MOVIES</h1>
+<div id="movieContainer"></div>
+<script src="javascript/watched-movies.js"></script>
+</body>
+</html>
