@@ -61,7 +61,7 @@
     async function loadDetails() {
       const token = localStorage.getItem("token");
 
-      const movieRes = await fetch("http://localhost:3000/user/movies", {
+      const movieRes = await fetch("https://movie-booking-backend-7oy8.onrender.com/user/movies", {
         headers: { Authorization: `Bearer ${token}` }
       });
       const movies = await movieRes.json();
@@ -81,7 +81,7 @@
         alert("Movie not found");
       }
 
-      const bookingRes = await fetch(`http://localhost:3000/user/bookings/${movieId}`, {
+      const bookingRes = await fetch(`https://movie-booking-backend-7oy8.onrender.com/user/bookings/${movieId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const booking = await bookingRes.json();
@@ -95,7 +95,7 @@
         alert("Booking not found");
       }
 
-    const userRes = await fetch(`http://localhost:3000/user/user/${userId}`, {
+    const userRes = await fetch(`https://movie-booking-backend-7oy8.onrender.com/user/user/${userId}`, {
     method: "GET",
     headers: {
     Authorization: `Bearer ${token}`
@@ -105,7 +105,7 @@
     const user = await userRes.json();
     document.getElementById("userNameSpan").innerText = user.name;
     
-    const qrData = `http://localhost:5500/Frontend/verify.html?bookingId=${encodeURIComponent(booking._id)}`;
+    const qrData = `https://vercel.com/atharv-consuls-projects/moviebookingfrontend/iCcnrCw8AYz68cvMHgAXfPBNapj4/verify.html?bookingId=${encodeURIComponent(booking._id)}`;
     QRCode.toDataURL(qrData, function (err, url) {
       if (err) {
        console.error("QR generation failed:", err);
