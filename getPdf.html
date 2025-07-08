@@ -105,7 +105,7 @@
     const user = await userRes.json();
     document.getElementById("userNameSpan").innerText = user.name;
     
-    const qrData = `https://vercel.com/atharv-consuls-projects/moviebookingfrontend/iCcnrCw8AYz68cvMHgAXfPBNapj4/verify.html?bookingId=${encodeURIComponent(booking._id)}`;
+    const qrData = `https://moviebookingfrontend-git-main-atharv-consuls-projects.vercel.app//verify.html?bookingId=${encodeURIComponent(booking._id)}`;
     QRCode.toDataURL(qrData, function (err, url) {
       if (err) {
        console.error("QR generation failed:", err);
