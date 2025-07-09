@@ -111,6 +111,10 @@
 }
 
 #trailerContent iframe {
+  width: 75vw;     
+  height: 40vw;
+  max-height: 90vh;     
+  max-width: 640px;
   border-radius: 10px;
 }
 
@@ -132,7 +136,6 @@
   align-items: center;
   justify-content: center;
 
-  box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
 
   </style>
@@ -150,7 +153,7 @@
 <div id="trailerModal" style="display:none;">
   <div id="trailerContent">
     <button id="closeTrailerBtn">✖</button>
-    <iframe id="trailerIframe" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+    <iframe id="trailerIframe"  frameborder="0" allowfullscreen></iframe>
   </div>
 </div>
 
