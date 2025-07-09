@@ -71,45 +71,131 @@ function renderMovies(movies, userId, token) {
     const btn = div.querySelector(".bookBtn");
 
     if (booking !== null) {
-      btn.innerText = "Booked!";
-      btn.disabled = true;
-      btn.style.backgroundColor = "#888";
-      btn.style.color = "#fff";
-      btn.style.cursor = "not-allowed";
-      btn.style.border = "1px solid #666";
-      btn.style.fontWeight = "bold";
+  btn.innerText = "Booked!";
+  btn.disabled = true;
+  btn.style.backgroundColor = "#888";
+  btn.style.color = "#fff";
+  btn.style.cursor = "not-allowed";
+  btn.style.border = "1px solid #666";
+
+
+  const cancelBtn = document.createElement("button");
+  cancelBtn.innerText = "Cancel Booking";
+  cancelBtn.classList.add("cancelBtn");
+
+  cancelBtn.style.marginLeft = "10px";
+  cancelBtn.style.backgroundColor = "#f44336";
+  cancelBtn.style.color = "#fff";
+  cancelBtn.style.border = "none";
+  cancelBtn.style.padding = "5px 10px";
+  cancelBtn.style.cursor = "pointer";
+
+  div.appendChild(cancelBtn);
+
+  cancelBtn.addEventListener("click", async () => {
+    const confirmCancel = confirm("Are you sure you want to cancel the booking?");
+    if (!confirmCancel) return;
+
+    try {
+      const cancelRes = await fetch(`https://movie-booking-backend-7oy8.onrender.com/user/cancel/${movie._id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const cancelData = await cancelRes.json();
+      alert(cancelData.message);
+
+      btn.innerText = "Book";
+      btn.disabled = false;
+      btn.style.backgroundColor = "";
+      btn.style.color = "";
+      btn.style.cursor = "";
+      btn.style.border = "";
+
+      cancelBtn.remove(); 
+    } catch (err) {
+      alert("Cancellation failed");
+      console.error(err);
     }
+  });
+}
 
     btn.addEventListener("click", async () => {
-      const seats = prompt("Enter number of seats to book:");
-      if (!seats || Number(seats) < 1) {
-        alert("Invalid input.");
-        return;
-      }
+  const seats = prompt("Enter number of seats to book:");
+  if (!seats || Number(seats) < 1) {
+    alert("Invalid input.");
+    return;
+  }
+
+  try {
+    const bookingRes = await fetch(`https://movie-booking-backend-7oy8.onrender.com/user/book/${movie._id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ numberOfSeats: Number(seats) }),
+    });
+
+    const bookingData = await bookingRes.json();
+    alert(bookingData.message);
+
+    btn.innerText = "Booked!";
+    btn.disabled = true;
+    btn.style.backgroundColor = "#888";
+    btn.style.color = "#fff";
+    btn.style.cursor = "not-allowed";
+    btn.style.border = "1px solid #666";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.innerText = "Cancel Booking";
+    cancelBtn.classList.add("cancelBtn");
+
+    cancelBtn.style.marginLeft = "10px";
+    cancelBtn.style.backgroundColor = "#f44336";
+    cancelBtn.style.color = "#fff";
+    cancelBtn.style.border = "none";
+    cancelBtn.style.padding = "5px 10px";
+    cancelBtn.style.cursor = "pointer";
+
+    btn.parentElement.appendChild(cancelBtn);
+
+    cancelBtn.addEventListener("click", async () => {
+      const confirmCancel = confirm("Are you sure you want to cancel the booking?");
+      if (!confirmCancel) return;
 
       try {
-        const bookingRes = await fetch(`https://movie-booking-backend-7oy8.onrender.com/user/book/${movie._id}`, {
-          method: "POST",
+        const cancelRes = await fetch(`https://movie-booking-backend-7oy8.onrender.com/user/cancel/${movie._id}`, {
+          method: "DELETE",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ numberOfSeats: Number(seats) }),
         });
 
-        const bookingData = await bookingRes.json();
-        alert(bookingData.message);
-        btn.innerText = "Booked!";
-        btn.disabled = true;
-        btn.style.backgroundColor = "#888";
-        btn.style.color = "#fff";
-        btn.style.cursor = "not-allowed";
-        btn.style.border = "1px solid #666";
+        const cancelData = await cancelRes.json();
+        alert(cancelData.message);
+
+        btn.innerText = "Book";
+        btn.disabled = false;
+        btn.style.backgroundColor = "";
+        btn.style.color = "";
+        btn.style.cursor = "";
+        btn.style.border = "";
+
+        cancelBtn.remove();
       } catch (err) {
-        alert("Booking failed");
+        alert("Cancellation failed");
         console.error(err);
       }
     });
+  } catch (err) {
+    alert("Booking failed");
+    console.error(err);
+  }
+});
+
 
     const trailerBtn = div.querySelector(".trailerBtn");
     if (trailerBtn) {
