@@ -43,7 +43,6 @@
     <p><strong>Movie:</strong> <span id="movieName"></span></p>
     <p><strong>Time:</strong> <span id="movieTime"></span></p>
     <p><strong>User:</strong> <span id="userNameSpan"></span></p>
-    <p><strong>Booking ID:</strong> <span id="bookingIdSpan"></span></p>
     <p><strong>No. of Seats:</strong> <span id="seatsSpan"></span></p>
     <p><strong>Booking Time:</strong> <span id="bookingDateSpan"></span></p>
     <p><strong>Scan to Verify:</strong></p>
@@ -90,7 +89,6 @@
       const booking = await bookingRes.json();
 
       if (booking) {
-        document.getElementById("bookingIdSpan").innerText = booking._id;
         document.getElementById("seatsSpan").innerText = booking.numberOfSeats;
         const date = new Date(booking.bookingTime).toLocaleString();
         document.getElementById("bookingDateSpan").innerText = date;
@@ -122,7 +120,9 @@ function waitForImageAndDownload() {
   if (img.complete) {
     generatePDF();
   } else {
-    img.onload = () => generatePDF();
+    img.onload = function() {
+    generatePDF();
+   };
   }
 }
 
